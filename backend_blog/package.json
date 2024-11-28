@@ -6,11 +6,16 @@
   "scripts": {
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development nodemon index.js",
-    "test": "NODE_ENV=test node --test --test-concurrency=1"
+    "test": "NODE_ENV=test node --test --test-concurrency=1",
+    "build:ui": "rm -rf dist && cd ../frontend_blog/ && npm run build && cp -r dist ../backend_blog",
+    "deploy": "fly deploy",
+    "deploy:full": "npm run build:ui && npm run deploy",
+    "logs:prod": "fly logs"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.9",
     "nodemon": "^3.0.3",
     "supertest": "^6.3.4"
   },

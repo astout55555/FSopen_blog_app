@@ -34,14 +34,14 @@ const Blog = ({ blog, user, setBlogs }) => {
   }
 
   return (
-    <div style={blogStyle}>
-      <div>
+    <div style={blogStyle} className="allBlogDetails" >
+      <div className="blogBasicDetails">
         {blog.title} {blog.author}
       </div>
       <Togglable buttonLabel="view" ref={blogRef} >
         {blog.url}
         <br/>
-        {likes} <LikeButton blog={blog} setLikes={setLikes} />
+        likes {likes} <LikeButton blog={blog} setLikes={setLikes} />
         <br/>
         {blog.user.name}
       </Togglable>

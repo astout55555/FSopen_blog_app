@@ -14,7 +14,7 @@ const LikeButton = ({ blog, setLikes }) => {
   }
 
   return (
-    <button onClick={handleLike} >
+    <button onClick={handleLike} className="likeButton" >
       Like
     </button>
   );

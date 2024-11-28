@@ -1,0 +1,25 @@
+# fly.toml app configuration file generated for backend-blog-icy-feather-4445 on 2024-11-28T13:53:27-07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'backend-blog-icy-feather-4445'
+primary_region = 'phx'
+
+[build]
+
+[env]
+  PORT = "3003"
+
+[http_service]
+  internal_port = 3003
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
