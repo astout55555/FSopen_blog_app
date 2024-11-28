@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Blog from './components/Blog';
 import blogService from './services/blogs';
 import loginService from './services/login';
 import BlogForm from './components/BlogForm';
 import Notification from './components/Notification';
+import Togglable from './components/Togglable';
+import DeleteButton from './components/DeleteButton';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -13,9 +15,12 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
+  const blogFormRef = useRef();
+
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs( blogs ));
-  }, []);
+  }, [user]); // user dependency avoids empty blog list upon logging back in.
+  // sets blogs state when logging out to all blogs, but not shown in component
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -76,15 +81,39 @@ const App = () => {
     );
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     window.localStorage.clear();
     setUser(null);
-    setBlogs([]);
+    // setBlogs([]); // doesn't work if blogs set by useEffect above
     setSuccessMessage('You have logged out');
     setTimeout(() => {
       setSuccessMessage(null);
     }, 3000);
   }
+
+  const addBlog = async (newBlog) => {
+    blogFormRef.current.toggleVisibility();
+    try {
+      const addedBlog = await blogService.create(newBlog);
+      setBlogs(blogs.concat(addedBlog));
+      setSuccessMessage(`a new blog ${newBlog.title} by ${newBlog.author} added`);
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 3000);
+    } catch(error) {
+      console.error(error.message);
+      setErrorMessage('error: blog not added');
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+    }
+  }
+
+  const blogForm = () => (
+    <Togglable buttonLabel="create" ref={blogFormRef} >
+      <BlogForm createBlog={addBlog} />
+    </Togglable>
+  );
 
   if (user === null) {
     return (
@@ -102,10 +131,9 @@ const App = () => {
       <h2>blogs</h2>
       <p>{user.name} logged in</p>
       {logoutForm()}
-      <BlogForm blogs={blogs} setBlogs={setBlogs}
-        setSuccessMessage={setSuccessMessage} setErrorMessage={setErrorMessage} />
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+      {blogForm()}
+      {blogs.toSorted((blogA, blogB) => blogB.likes - blogA.likes).map(blog =>
+        <Blog key={blog.id} blog={blog} user={user} />
       )}
     </div>
   )
