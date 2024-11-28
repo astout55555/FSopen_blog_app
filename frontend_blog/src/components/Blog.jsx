@@ -1,10 +1,10 @@
 import { useState, useRef } from 'react';
 import blogService from '../services/blogs';
-import Togglable from "./Togglable";
-import LikeButton from "./LikeButton";
+import Togglable from './Togglable';
+import LikeButton from './LikeButton';
 import DeleteButton from './DeleteButton';
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog, user, setBlogs }) => {
   const [likes, setLikes] = useState(blog.likes);
 
   const blogRef = useRef();

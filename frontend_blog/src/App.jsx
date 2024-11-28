@@ -5,7 +5,6 @@ import loginService from './services/login';
 import BlogForm from './components/BlogForm';
 import Notification from './components/Notification';
 import Togglable from './components/Togglable';
-import DeleteButton from './components/DeleteButton';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -53,7 +52,7 @@ const App = () => {
     <form onSubmit={handleLogin}>
       <div>
         username
-          <input
+        <input
           type="text"
           value={username}
           name="Username"
@@ -62,7 +61,7 @@ const App = () => {
       </div>
       <div>
         password
-          <input
+        <input
           type="password"
           value={password}
           name="Password"
@@ -70,7 +69,7 @@ const App = () => {
         />
       </div>
       <button type="submit">login</button>
-    </form>      
+    </form>
   );
 
   const logoutForm = () => {
@@ -133,10 +132,10 @@ const App = () => {
       {logoutForm()}
       {blogForm()}
       {blogs.toSorted((blogA, blogB) => blogB.likes - blogA.likes).map(blog =>
-        <Blog key={blog.id} blog={blog} user={user} />
+        <Blog key={blog.id} blog={blog} user={user} setBlogs={setBlogs} />
       )}
     </div>
   )
 }
 
-export default App
+export default App;

@@ -1,4 +1,4 @@
-const Notification = ({successMessage, errorMessage}) => {
+const Notification = ({ successMessage, errorMessage }) => {
   const successStyle = {
     backgroundColor: 'green',
     fontSize: 16,
